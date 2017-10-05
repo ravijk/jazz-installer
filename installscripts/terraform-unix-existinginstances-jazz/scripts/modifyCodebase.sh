@@ -86,3 +86,9 @@ sed -i "s/securityGroupIds.*.$/securityGroupIds: $securityGroupIds/g" ./jazz-cor
 sed -i "s/subnetIds.*.$/subnetIds: $subnetIds/g" ./jazz-core/lambda-template-python/deployment-env.yml
 sed -i "s=iamRoleARN.*.$=iamRoleARN: $iamRoleARN=g" ./jazz-core/lambda-template-python/deployment-env.yml
 sed -i "s/region.*.$/region: $region/g" ./jazz-core/lambda-template-python/deployment-env.yml
+
+# Modify platform-usermanagement deployment-env.yml file
+sed -i "s/securityGroupIds.*.$/securityGroupIds: $securityGroupIds/g" ./jazz-core/platform-usermanagement/deployment-env.yml
+sed -i "s/subnetIds.*.$/subnetIds: $subnetIds/g" ./jazz-core/platform-usermanagement/deployment-env.yml
+sed -i "s=iamRoleARN.*.$=iamRoleARN: $iamRoleARN=g" ./jazz-core/platform-usermanagement/deployment-env.yml
+sed -i "s/region.*.$/region: $region/g" ./jazz-core/platform-usermanagement/deployment-env.yml
