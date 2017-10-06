@@ -244,6 +244,11 @@ EOF
 	on_failure = "continue"
     command = " aws iam detach-role-policy --role-name ${aws_iam_role.lambda_role.name} --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess"
   }
+  provisioner "local-exec" {
+        when = "destroy"
+	on_failure = "continue"
+    command = " aws iam detach-role-policy --role-name ${aws_iam_role.lambda_role.name} --policy-arn arn:aws:iam::aws:policy/AmazonCognitoPowerUser"
+  }
 }
 
 
@@ -277,7 +282,10 @@ resource "aws_iam_role_policy_attachment" "s3fullaccess" {
     role       = "${aws_iam_role.lambda_role.name}"
     policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
-
+resource "aws_iam_role_policy_attachment" "cognitopoweruser" {
+    role       = "${aws_iam_role.lambda_role.name}"
+    policy_arn = "arn:aws:iam::aws:policy/AmazonCognitoPowerUser"
+}
 resource "aws_s3_bucket" "dev-serverless-static" {
   bucket_prefix = "${var.envPrefix}-dev-web-"
   acl    = "public-read-write"
