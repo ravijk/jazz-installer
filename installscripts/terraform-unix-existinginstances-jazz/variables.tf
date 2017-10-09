@@ -1,7 +1,4 @@
-variable "region" {
-  type = "string"
-  default = "us-east-1"
-}
+variable "region" { type = "string" default = "us-east-1" }
 variable "vpc" {
   type = "string"
   default = "vpc-e1b9b784"   // us-east-1

@@ -1,7 +1,4 @@
-variable "region" {
-  type = "string"
-  default = "us-east-1"
-}
+variable "region" { type = "string" default = "us-east-1" }
 /* moved to netVars.tf
 variable "vpc" {
   type = "string"
@@ -89,4 +86,14 @@ variable "github_password" {
   type = "string"
   default = "Tmobiledemo1"
 }
+
+variable "jenkinsamimap" {
+  type = "map"
+
+  default = {
+    us-east-1 = "ami-5a293a21"
+    us-west-2 = "ami-0537f27d"
+  }
+}
+
 variable "github_branch" { type = "string" default = "development" }
