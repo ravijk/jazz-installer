@@ -154,7 +154,7 @@ resource "aws_instance" "jenkinsserver" {
 }
 resource "aws_instance" "bitbucketserver" {
   instance_type = "t2.medium"
-  ami = "${var.bitbucketserver_ami}"
+  ami = "${lookup(var.bitbucketamimap, "${var.region}")}"
   key_name   = "${aws_key_pair.auth.key_name}"
   vpc_security_group_ids = ["${aws_security_group.bitbucket.id}"]
   subnet_id = "${var.subnet}"

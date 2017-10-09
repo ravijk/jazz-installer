@@ -87,3 +87,12 @@ variable "jenkinsamimap" {
     us-west-2 = "ami-0537f27d"
   }
 }
+
+variable "bitbucketamimap" {
+  type = "map"
+
+  default = {
+    us-east-1 = "ami-9ba986e0"
+    us-west-2 = "ami-1f8e4967"
+  }
+}
