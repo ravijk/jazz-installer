@@ -78,3 +78,12 @@ variable "bitbucketservermap" {
     private_ip = "please change"
   }
 }
+
+variable "jenkinsamimap" {
+  type = "map"
+
+  default = {
+    us-east-1 = "ami-5a293a21"
+    us-west-2 = "ami-0537f27d"
+  }
+}
