@@ -302,6 +302,9 @@ resource "aws_s3_bucket" "dev-serverless-static" {
     command = "${var.modifyPropertyFile_cmd} WEBSITE_DEV_S3BUCKET ${aws_s3_bucket.dev-serverless-static.bucket} ${var.jenkinspropsfile}"
   }
   provisioner "local-exec" {
+    command = "${var.modifyPropertyFile_cmd} JAZZ_REGION ${var.region} ${var.jenkinspropsfile}"
+  }
+  provisioner "local-exec" {
 	when = "destroy"
 	on_failure = "continue"
     command = "	aws s3 rm s3://${aws_s3_bucket.dev-serverless-static.bucket} --recursive"
