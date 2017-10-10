@@ -66,6 +66,6 @@ curl -L https://raw.githubusercontent.com/tmobile/jazz-installer/master/installs
     AWS::Elasticsearch::Domain
 
 ## Wiki
-* [Installer](https://github.com/tmobile/jazz-installer/wiki)
+* [Installer](https://github.co/jazz-installer/wiki)
 * [Jazz-Core](https://github.com/tmobile/jazz-core/wiki)
 * [Getting Started with Service Development using Serverless](https://github.com/tmobile/jazz-core/wiki/Getting-Started-with-Service-Development-using-Serverless)
