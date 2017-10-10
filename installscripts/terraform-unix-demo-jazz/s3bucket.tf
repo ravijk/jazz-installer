@@ -452,9 +452,12 @@ data "aws_iam_policy_document" "prod-serverless-static-policy-data-contents" {
                         "s3:ListBucket"
         ]
         principals  {
+                        type="AWS",
+                        identifiers = ["${aws_iam_role.lambda_role.arn}"]
+                        }
+        resources = [
                 "${aws_s3_bucket.prod-serverless-static.arn}"
         ]
-
   }
 
 }
@@ -498,3 +501,4 @@ data "aws_iam_policy_document" "jazz-web-policy-data-contents" {
 resource "aws_s3_bucket_policy" "jazz-web-bucket-contents-policy" {
         bucket = "${aws_s3_bucket.jazz-web.id}"
         policy = "${data.aws_iam_policy_document.jazz-web-policy-data-contents.json}"
+}
