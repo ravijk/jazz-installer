@@ -2,7 +2,6 @@ data "aws_canonical_user_id" "current" {}
 
 resource "aws_s3_bucket" "cloudfrontlogs" {
   bucket_prefix="${var.envPrefix}-cloudfrontlogs-"
-  acl    = "public-read-write"
   request_payer = "BucketOwner"
   region = "${var.region}"
   cors_rule {
@@ -24,7 +23,6 @@ resource "aws_s3_bucket" "cloudfrontlogs" {
 
 resource "aws_s3_bucket" "oab-apis-deployment-dev" {
   bucket_prefix = "${var.envPrefix}-apis-deployment-dev-"
-  acl    = "public-read-write"
   request_payer = "BucketOwner"
   region = "${var.region}"
   cors_rule {
@@ -46,7 +44,6 @@ resource "aws_s3_bucket" "oab-apis-deployment-dev" {
 }
 resource "aws_s3_bucket" "oab-apis-deployment-stg" {
   bucket_prefix = "${var.envPrefix}-apis-deployment-stg-"
-  acl    = "public-read-write"
   request_payer = "BucketOwner"
   region = "${var.region}"
   cors_rule {
@@ -68,7 +65,6 @@ resource "aws_s3_bucket" "oab-apis-deployment-stg" {
 }
 resource "aws_s3_bucket" "oab-apis-deployment-prod" {
   bucket_prefix = "${var.envPrefix}-apis-deployment-prod-"
-  acl    = "public-read-write"
   request_payer = "BucketOwner"
   region = "${var.region}"
   cors_rule {
@@ -113,7 +109,6 @@ resource "aws_api_gateway_rest_api" "jazz-prod" {
 }
 resource "aws_s3_bucket" "jazz-web" {
   bucket_prefix = "${var.envPrefix}-web-"
-  acl    = "public-read-write"
   request_payer = "BucketOwner"
   region = "${var.region}"
   depends_on = ["aws_api_gateway_rest_api.jazz-prod" ]
@@ -236,6 +231,10 @@ EOF
   provisioner "local-exec" {
         when = "destroy"
 	on_failure = "continue"
+        when = "destroy"
+	on_failure = "continue"
+        when = "destroy"
+	on_failure = "continue"
     command = " aws iam detach-role-policy --role-name ${aws_iam_role.lambda_role.name} --policy-arn arn:aws:iam::aws:policy/AmazonVPCCrossAccountNetworkInterfaceOperations"
   }
   provisioner "local-exec" {
@@ -287,7 +286,6 @@ resource "aws_iam_role_policy_attachment" "cognitopoweruser" {
 }
 resource "aws_s3_bucket" "dev-serverless-static" {
   bucket_prefix = "${var.envPrefix}-dev-web-"
-  acl    = "public-read-write"
   request_payer = "BucketOwner"
   region = "${var.region}"
   cors_rule {
@@ -301,6 +299,9 @@ resource "aws_s3_bucket" "dev-serverless-static" {
     command = "${var.modifyPropertyFile_cmd} WEBSITE_DEV_S3BUCKET ${aws_s3_bucket.dev-serverless-static.bucket} ${var.jenkinspropsfile}"
   }
   provisioner "local-exec" {
+    command = "${var.modifyPropertyFile_cmd} JAZZ_REGION ${var.region} ${var.jenkinspropsfile}"
+  }
+  provisioner "local-exec" {
 	when = "destroy"
 	on_failure = "continue"
     command = "	aws s3 rm s3://${aws_s3_bucket.dev-serverless-static.bucket} --recursive"
@@ -310,7 +311,6 @@ resource "aws_s3_bucket" "dev-serverless-static" {
 
 resource "aws_s3_bucket" "stg-serverless-static" {
   bucket_prefix = "${var.envPrefix}-stg-web-"
-  acl    = "public-read-write"
   request_payer = "BucketOwner"
   region = "${var.region}"
   cors_rule {
@@ -324,9 +324,6 @@ resource "aws_s3_bucket" "stg-serverless-static" {
     command = "${var.modifyPropertyFile_cmd} WEBSITE_STG_S3BUCKET ${aws_s3_bucket.stg-serverless-static.bucket} ${var.jenkinspropsfile}"
   }
   provisioner "local-exec" {
-    command = "${var.modifyPropertyFile_cmd} JAZZ_REGION ${var.region} ${var.jenkinspropsfile}"
-  }
-  provisioner "local-exec" {
 	when = "destroy"
 	on_failure = "continue"
     command = "	aws s3 rm s3://${aws_s3_bucket.stg-serverless-static.bucket} --recursive"
@@ -336,7 +333,6 @@ resource "aws_s3_bucket" "stg-serverless-static" {
 
 resource "aws_s3_bucket" "prod-serverless-static" {
   bucket_prefix = "${var.envPrefix}-prod-web-"
-  acl    = "public-read-write"
   request_payer = "BucketOwner"
   region = "${var.region}"
   cors_rule {
@@ -454,7 +450,6 @@ data "aws_iam_policy_document" "prod-serverless-static-policy-data-contents" {
         resources = [
                 "${aws_s3_bucket.prod-serverless-static.arn}"
         ]
-
   }
 
 }
@@ -498,3 +493,4 @@ data "aws_iam_policy_document" "jazz-web-policy-data-contents" {
 resource "aws_s3_bucket_policy" "jazz-web-bucket-contents-policy" {
         bucket = "${aws_s3_bucket.jazz-web.id}"
         policy = "${data.aws_iam_policy_document.jazz-web-policy-data-contents.json}"
+}
