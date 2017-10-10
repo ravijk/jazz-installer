@@ -466,3 +466,38 @@ resource "aws_s3_bucket_policy" "prod-serverless-static-bucket-contents-policy" 
         policy = "${data.aws_iam_policy_document.prod-serverless-static-policy-data-contents.json}"
 }
 
+data "aws_iam_policy_document" "jazz-web-policy-data-contents" {
+  policy_id = "PolicyForCloudFrontPrivateContent"
+  statement {
+        sid = "1"
+        actions = [
+                        "s3:*"
+        ]
+        principals  {
+                        type="AWS",
+                        identifiers = ["${aws_iam_role.lambda_role.arn}"]
+                        }
+        resources = [
+                "${aws_s3_bucket.jazz-web.arn}/*"
+        ]
+
+  }
+  statement {
+        sid = "ListBucket"
+        actions = [
+                        "s3:ListBucket"
+        ]
+        principals  {
+                        type="AWS",
+                        identifiers = ["${aws_iam_role.lambda_role.arn}"]
+                        }
+        resources = [
+                "${aws_s3_bucket.jazz-web.arn}"
+        ]
+
+  }
+
+}
+resource "aws_s3_bucket_policy" "jazz-web-bucket-contents-policy" {
+        bucket = "${aws_s3_bucket.jazz-web.id}"
+        policy = "${data.aws_iam_policy_document.jazz-web-policy-data-contents.json}"
